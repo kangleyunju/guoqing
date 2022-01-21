@@ -16,7 +16,7 @@ QQ: 249042680
 
 ## 体验小程序
 可以扫描项目下的demo.jpg
-![主题](./demo.jpg)
+![demo](./demo.jpg)
 
 
 
