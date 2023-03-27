@@ -1,26 +1,26 @@
 let log = console.log; // 如果在项目的APP.vue文件中的onlaunch中设置 console.log = ()=> {} 则在此也不会有打印信息
-// log = ()=>{};	// 打开注释则该插件不会打印任何信息
+// log = ()=>{};	//本地调试打印信息,发布时可以注释
 let _app = {
-	lineFeedTags: ['<br />', '<br/>', '\r\n', '\n\t', '\r', '\n'],	//换行符识别列表
-	tagetLineFeedTag: `❤`,	//将lineFeedTags列表中的字符串替换为该字符, 代表换行符, 只要找一个特殊符号就行，必须是单字符单字符单字符!
+	lineFeedTags: ['<br />', '<br/>', '\r\n', '\n\t', '\r', '\n'], //换行符识别列表
+	tagetLineFeedTag: `❤`, //将lineFeedTags列表中的字符串替换为该字符, 代表换行符, 只要找一个特殊符号就行，必须是单字符单字符单字符!
 	//交互控制
 	log(t) {
 		log(t);
 	}, // 打印控制,
 	showLoading(msg, ifmask) {
-		// uni.showLoading({
-		// 	title: msg,
-		// 	mask: ifmask || false
-		// })
+		uni.showLoading({
+			title: msg,
+			mask: ifmask || false
+		})
 	},
 	hideLoading() {
-		// uni.hideLoading();
+		uni.hideLoading();
 	},
 	showToast(msg, icon) {
-		// uni.showToast({
-		// 	title: msg,
-		// 	icon: icon || 'none'
-		// })
+		uni.showToast({
+			title: msg,
+			icon: icon || 'none'
+		})
 	},
 	getPosterUrl(objs) { // 后端获取背景图的url路径方法
 		let {
@@ -32,7 +32,7 @@ let _app = {
 			let image;
 			if (backgroundImage) {
 				image = backgroundImage;
-			}else{
+			} else {
 				switch (type) { //根据type获取背景图, 一般要改成request获取
 					case 1:
 						image = '';
@@ -44,17 +44,11 @@ let _app = {
 			}
 			if (image) {
 				rs(image); // resolve图片的路径
-			}else{
+			} else {
 				rj('背景图片路径不存在');
 			}
 		})
 	},
-
-
-
-
-
-
 	//下面一般不用动他
 	shareTypeListSheetArray: {
 		array: [0, 1, 2, 3, 4, 5]
@@ -121,7 +115,6 @@ let _app = {
 	},
 	getImageInfo(url, cb, fcb) {
 		url = checkMPUrl(url);
-			console.log('====================3')
 		wx.getImageInfo({
 			src: url,
 			success(res) {
@@ -131,7 +124,6 @@ let _app = {
 				if (fcb && typeof(fcb) == 'function') fcb(err);
 			}
 		})
-			console.log('====================4')
 	},
 	downloadFile(url, cb) {
 		url = checkMPUrl(url);
@@ -146,16 +138,14 @@ let _app = {
 		return new Promise((rs, rj) => {
 			if (url.substring(0, 4) !== 'http') {
 				rs(url);
-			}else {
+			} else {
 				url = checkMPUrl(url);
 				log('url:' + url);
 				wx.downloadFile({
 					url,
 					success(res) {
-						if (res && res.tempFilePath)
-							rs(res.tempFilePath);
-						else
-							rj('not find tempFilePath');
+						if (res && res.tempFilePath) rs(res.tempFilePath);
+						else rj('not find tempFilePath');
 					},
 					fail(err) {
 						rj(err);
@@ -182,27 +172,22 @@ let _app = {
 					success(d_res) {
 						log('下载背景图成功：' + JSON.stringify(d_res));
 						if (d_res && d_res.tempFilePath) {
-							
 							// #ifdef H5
 							rs(d_res.tempFilePath);
 							// #endif
-							
 							// #ifndef H5
 							uni.saveFile({
 								tempFilePath: d_res.tempFilePath,
 								success(s_res) {
 									log('保存背景图成功:' + JSON.stringify(s_res));
-									if (s_res && s_res.savedFilePath)
-										rs(s_res.savedFilePath);
-									else
-										rs(d_res.tempFilePath);
+									if (s_res && s_res.savedFilePath) rs(s_res.savedFilePath);
+									else rs(d_res.tempFilePath);
 								},
 								fail(err) {
 									rs(d_res.tempFilePath);
 								}
 							})
 							// #endif
-							
 						} else {
 							rj('not find tempFilePath');
 						}
@@ -211,7 +196,7 @@ let _app = {
 						rj(err);
 					}
 				})
-			}else{
+			} else {
 				rs(url);
 			}
 		})
@@ -239,10 +224,9 @@ let _app = {
 				let index = d.findIndex(item => {
 					return item.filePath === path;
 				});
-				if (index >= 0)
-					uni.removeSavedFile({
-						filePath: path
-					})
+				if (index >= 0) uni.removeSavedFile({
+					filePath: path
+				})
 			}
 		})
 	},
@@ -254,7 +238,6 @@ let _app = {
 		return new Promise((rs, rj) => {
 			log('准备获取图片信息:' + imgPath);
 			imgPath = checkMPUrl(imgPath);
-			console.log('====================1')
 			wx.getImageInfo({
 				src: imgPath,
 				success: res => {
@@ -266,12 +249,10 @@ let _app = {
 					rj(err)
 				}
 			})
-			console.log('====================2')
-		});
+		})
 	},
 	previewImage(urls) {
-		if (typeof(urls) == 'string')
-			urls = [urls];
+		if (typeof(urls) == 'string') urls = [urls];
 		uni.previewImage({
 			urls,
 		})
@@ -372,12 +353,10 @@ let _app = {
 	getShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb, fcb) { //miniProgram: {path: '', type: 0, webUrl: ''}
 		let _this = this;
 		if (typeof(shareType) == 'number' && !isNaN(shareType) && shareType >= 0) {
-			_this.readyShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb,
-				fcb);
+			_this.readyShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb, fcb);
 		} else {
 			_this.actionSheet(_this.shareTypeListSheetArray, function(index) {
-				_this.readyShare(providerName, WXScene, _this.shareTypeListSheetArray.array[index], title, summary, href,
-					imageUrl, miniProgramObj, mediaUrl, scb, fcb);
+				_this.readyShare(providerName, WXScene, _this.shareTypeListSheetArray.array[index], title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb, fcb);
 			});
 		}
 	},
@@ -423,7 +402,8 @@ let _app = {
 				break;
 			case 5:
 				shareObjData = {
-					miniProgram: { ...miniProgramObj,
+					miniProgram: {
+						...miniProgramObj,
 						id: miniProgramId,
 						type: miniProgramShareType
 					},
@@ -548,20 +528,6 @@ let _app = {
 }
 
 function checkMPUrl(url) {
-	// #ifdef MP
-	// if(process.env.NODE_ENV !== 'development'){
-	// 	if(
-	// 		url.substring(0, 4) === 'http' && 
-	// 		url.substring(0, 5) !== 'https' && 
-	// 		url.substring(0, 12) !== 'http://store' && 
-	// 		url.substring(0, 10) !== 'http://tmp' && 
-	// 		url.substring(0, 10) !== 'http://usr'
-	// 	) {
-	// 		url = 'https' + url.substring(4, url.length);
-	// 	}
-	// }
-	// #endif
 	return url;
 }
-
 module.exports = _app;
