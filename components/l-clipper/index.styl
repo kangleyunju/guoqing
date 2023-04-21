@@ -11,7 +11,8 @@ $clipper-confirm-color ?= #07c160
 	width 100vw
 	height calc( 100vh - var(--window-top))
 	background-color rgba(0, 0, 0, 0.9)
-	position fixed
+	position:fixed;
+	position: absolute;
 	top var(--window-top)
 	left 300vw
 	z-index 1
@@ -106,7 +107,8 @@ $clipper-confirm-color ?= #07c160
 		backface-visibility hidden
 		transform-origin center
 	&-canvas
-		position fixed
+		position:fixed;
+		position: absolute;
 		z-index 10
 		left -200vw
 		top -200vw

@@ -1,6 +1,6 @@
 <template>
 	<view class="indexContainer">
-		<image src="@/static/index/background.jpg" class="bgImg" mode="aspectFill"/>
+		<image src="@/static/index/background.jpg" class="bgImg" mode="aspectFill" />
 		<view class="topBox">
 			<view class="title">
 				<view class="name" :class="{ 'select': item.selected }" v-for="(item, index) in imageList" :key="index" @click="itemClick(item)">
@@ -15,21 +15,21 @@
 		</view>
 		<view class="mainBox">
 			<view class="avatarBox " id="avatar-container">
-				<image class="img" :src="avatarImage" v-if="avatarImage"/>
+				<image class="img" :src="avatarImage" v-if="avatarImage" />
 				<image class="empty" src="/static/index/avatar.svg" v-else />
 				<image class="avatarBg" :src="currentFrame" v-if="currentFrame" />
 			</view>
 			<view class="btnBox">
-				<!-- #ifdef H5 -->
 				<view class="iconBtn">
 					<view class="icon-zuo iconfont" v-if="showSwitch(-1)" @click="switchAvatar(-1)"></view>
 					<view class="icon-you iconfont" v-if="showSwitch(1)" @click="switchAvatar(1)"></view>
 				</view>
-				<!-- #endif -->
 				<!-- #ifdef MP-WEIXIN -->
-				<button class="actionBtn" open-type="getUserInfo" @click="getFace()">获取头像</button>
+				<button class="actionBtn" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">获取头像</button>
 				<!-- #endif -->
+				<!-- #ifdef H5 -->
 				<button class="actionBtn" @click="uploadFace()">上传头像</button>
+				<!-- #endif -->
 				<button class="actionBtn save" @click="saveFace()">保存头像</button>
 			</view>
 		</view>
@@ -44,7 +44,7 @@
 		data() {
 			return {
 				poster: {},
-				posterImage: '',//生成的图片
+				posterImage: '', //生成的图片
 				canvasId: 'defaultCanvasId', //画布id
 				userInfo: '',
 				code: '',
@@ -59,7 +59,9 @@
 				}, {
 					title: '多样背景',
 					selected: false,
-					imgs: [{ src: '/static/images/other/1.png' }, { src: '/static/images/other/2.png' }, { src: '/static/images/other/3.png' }, { src: '/static/images/other/4.png' }, { src: '/static/images/other/5.png' }, { src: '/static/images/other/6.png' }, { src: '/static/images/other/7.png' }, { src: '/static/images/other/8.png' }, { src: '/static/images/other/9.png' }, { src: '/static/images/other/10.png' }]
+					imgs: [{ src: '/static/images/other/1.png' }, { src: '/static/images/other/2.png' }, { src: '/static/images/other/3.png' }, { src: '/static/images/other/4.png' }, { src: '/static/images/other/5.png' }, { src: '/static/images/other/6.png' }, { src: '/static/images/other/7.png' },
+						{ src: '/static/images/other/8.png' }, { src: '/static/images/other/9.png' }, { src: '/static/images/other/10.png' }
+					]
 				}, {
 					title: '质朴国旗',
 					selected: false,
@@ -149,7 +151,7 @@
 				item.selected = true
 			},
 			uploadFace() {
-				let that=this
+				let that = this
 				const crop = {
 					quality: 100,
 					width: 600,
@@ -161,19 +163,19 @@
 					crop,
 					sourceType: ['album'],
 					success: async (res) => {
-						let size=res.tempFiles[0].size
-						if(res.tempFiles[0].size/1024/1024>2){
+						let size = res.tempFiles[0].size
+						if (res.tempFiles[0].size / 1024 / 1024 > 2) {
 							uni.showToast({
 								title: '图片大小不能大于2M',
 								icon: 'none',
 								mask: true
 							})
-						}else{
-							let  filePath = res.tempFilePaths[0]
+						} else {
+							let filePath = res.tempFilePaths[0]
 							// #ifndef APP-PLUS
 							filePath = await new Promise((callback) => {
 								uni.navigateTo({
-									url: '/pages/index/cropImage?path=' + filePath +`&options=${JSON.stringify(crop)}`,
+									url: '/pages/index/cropImage?path=' + filePath + `&options=${JSON.stringify(crop)}`,
 									animationType: "fade-in",
 									events: {
 										success: url => {
@@ -182,33 +184,20 @@
 									}
 								});
 							})
-							that.avatarImage=filePath
+							that.avatarImage = filePath
 							// #endif
 						}
 					}
 				})
 			},
-			getFace(e) {
-				// #ifdef MP-WEIXIN
-				let that = this
-				uni.getUserProfile({
-					desc: '获取您的头像信息',
-					success(result) {
-						let avatarUrl=result.userInfo.avatarUrl
-						result.userInfo.avatarUrl=avatarUrl.substring(0, avatarUrl.lastIndexOf('/') + 1) + '0'
-						let data = {
-							code: that.code,
-							signature: result.signature,
-							encrypted_data: result.encryptedData,
-							iv: result.iv,
-							userInfo: result.userInfo
-						}
-						that.avatarImage = result.userInfo.avatarUrl
-						uni.setStorageSync('user_info', data.userInfo)
-					},
-					fail(fall) {}
-				})
-				// #endif
+			//原来的uni.getUserProfile已经不可用
+			onChooseAvatar(e) {
+				const { avatarUrl } = e.detail
+				const userInfo = {
+					avatarUrl
+				}
+				this.avatarImage = avatarUrl
+				uni.setStorageSync('user_info', userInfo)
 			},
 			async saveFace() {
 				if (!this.avatarImage) {
@@ -268,7 +257,7 @@
 					//h5生成的图片需要长按保存
 					uni.hideLoading()
 					uni.previewImage({
-						urls:[this.posterImage]
+						urls: [this.posterImage]
 					})
 					// #endif
 					// #ifdef MP-WEIXIN

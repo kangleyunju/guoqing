@@ -2,7 +2,7 @@
     "name" : "国庆头像生成器",
     "appid" : "__UNI__387212C",
     "description" : "国庆头像生成器",
-    "versionName" : "1.0.0",
+    "versionName" : "3.0.1",
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {
@@ -68,5 +68,18 @@
     "locale" : "zh-Hans",
     "devServer" : {
         "disableHostCheck" : true
+    },
+    "h5" : {
+        "template" : "index.html",
+        "title" : "国庆头像生成器",
+        "router" : {
+            "mode" : "hash",
+            "base" : "/guoqing/"
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        }
     }
 }

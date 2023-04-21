@@ -1,6 +1,5 @@
 {
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom"
@@ -13,11 +12,11 @@
 				"navigationBarTextStyle": "white",
 				"navigationBarBackgroundColor": "#0c0c0c",
 				"app-plus": {
-					"titleNView": true
+					"titleNView": false
 				}
 			}
 		}
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "国庆头像生成器",

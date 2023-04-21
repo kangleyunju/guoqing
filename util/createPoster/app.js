@@ -1,5 +1,5 @@
 let log = console.log; // 如果在项目的APP.vue文件中的onlaunch中设置 console.log = ()=> {} 则在此也不会有打印信息
-// log = ()=>{};	//本地调试打印信息,发布时可以注释
+log = () => {}; //本地调试打印信息,发布时可以注释
 let _app = {
 	lineFeedTags: ['<br />', '<br/>', '\r\n', '\n\t', '\r', '\n'], //换行符识别列表
 	tagetLineFeedTag: `❤`, //将lineFeedTags列表中的字符串替换为该字符, 代表换行符, 只要找一个特殊符号就行，必须是单字符单字符单字符!
