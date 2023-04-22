@@ -20,15 +20,15 @@
 				<image class="avatarBg" :src="currentFrame" v-if="currentFrame" />
 			</view>
 			<view class="btnBox">
+				<!-- #ifdef H5 -->
 				<view class="iconBtn">
 					<view class="icon-zuo iconfont" v-if="showSwitch(-1)" @click="switchAvatar(-1)"></view>
 					<view class="icon-you iconfont" v-if="showSwitch(1)" @click="switchAvatar(1)"></view>
 				</view>
+				<!-- #endif -->
+				<button class="actionBtn" @click="uploadFace()">上传头像</button>
 				<!-- #ifdef MP-WEIXIN -->
 				<button class="actionBtn" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">获取头像</button>
-				<!-- #endif -->
-				<!-- #ifdef H5 -->
-				<button class="actionBtn" @click="uploadFace()">上传头像</button>
 				<!-- #endif -->
 				<button class="actionBtn save" @click="saveFace()">保存头像</button>
 			</view>
@@ -48,7 +48,7 @@
 				canvasId: 'defaultCanvasId', //画布id
 				userInfo: '',
 				code: '',
-				readLocal: false, //是否读取缓存信息
+				readLocal: true, //是否读取缓存信息
 				avatarImage: '', //头像
 				currentFrame: '/static/images/gradual/1.png',
 				currentIndex: 0,
@@ -64,6 +64,7 @@
 					]
 				}, {
 					title: '质朴国旗',
+
 					selected: false,
 					imgs: [{ src: '/static/images/simple/1.png' }, { src: '/static/images/simple/2.png' }, { src: '/static/images/simple/3.png' }, { src: '/static/images/simple/4.png' }, { src: '/static/images/simple/5.png' }, { src: '/static/images/simple/6.png' }, { src: '/static/images/simple/7.png' }],
 				}, {
@@ -190,7 +191,7 @@
 					}
 				})
 			},
-			//原来的uni.getUserProfile已经不可用
+			//原来的uni.getUserProfile已经不可用,此方法获取头像非常模糊,官方没有目前还未解决,建议自己上传图片
 			onChooseAvatar(e) {
 				const { avatarUrl } = e.detail
 				const userInfo = {
@@ -214,7 +215,7 @@
 						mask: true
 					})
 					const d = await getSharePoster({
-						that: this, //若在组件中使用 必传
+						that: this, //若在组件中使用必传
 						type: 'testShareType',
 						formData: {
 							//访问接口获取背景图携带自定义数据
